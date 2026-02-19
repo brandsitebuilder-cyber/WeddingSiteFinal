@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lourens & Ané | Wedding</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wedding: {
+                            olive: '#6b705c',
+                            oliveDark: '#4a4e40',
+                            cream: '#f0ebd8',
+                            sand: '#ddb892',
+                            charcoal: '#333333'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Lato"', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0ebd8; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #6b705c; 
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4a4e40; 
+        }
+
+        .bg-noise {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .modal-open {
+            overflow: hidden;
+        }
+    </style>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "@google/genai": "https://esm.sh/@google/genai@^1.41.0"
+        }
+    }
+    </script>
+</head>
+<body class="bg-wedding-cream text-wedding-charcoal antialiased">
+
+    <!-- Navigation -->
+    <nav class="absolute top-0 left-0 w-full z-20 p-8 flex justify-between md:justify-start gap-8 items-center">
+        <a href="#home" class="nav-link text-xs tracking-[0.2em] font-sans font-bold uppercase text-white opacity-100 transition-opacity hover:opacity-100">HOME</a>
+        <a href="#gallery" class="nav-link text-xs tracking-[0.2em] font-sans font-bold uppercase text-white/70 transition-opacity hover:opacity-100 hover:text-white">GALLERY</a>
+        <a href="#registry" class="nav-link text-xs tracking-[0.2em] font-sans font-bold uppercase text-white/70 transition-opacity hover:opacity-100 hover:text-white">REGISTRY</a>
+        <a href="#guestbook" class="nav-link text-xs tracking-[0.2em] font-sans font-bold uppercase text-white/70 transition-opacity hover:opacity-100 hover:text-white">GUESTBOOK</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative w-full h-screen flex flex-col md:flex-row overflow-hidden">
+        <div class="w-full md:w-[45%] bg-wedding-olive h-1/2 md:h-full flex flex-col justify-end p-8 md:p-16 relative">
+            <div class="absolute inset-0 bg-noise opacity-10 pointer-events-none"></div>
+            <div class="mb-8 md:mb-16 z-10 text-white">
+                <p class="text-sm md:text-base tracking-[0.2em] mb-4 md:mb-8 font-sans opacity-80">11.21.2026</p>
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif leading-tight mb-8">
+                    Lourens &<br />Ané
+                </h1>
+                <div class="flex gap-4 md:gap-8 font-sans text-center">
+                    <div>
+                        <span id="days" class="text-2xl md:text-3xl font-light block">0</span>
+                        <span class="text-[10px] uppercase tracking-widest opacity-60">Days</span>
+                    </div>
+                    <div>
+                        <span id="hours" class="text-2xl md:text-3xl font-light block">0</span>
+                        <span class="text-[10px] uppercase tracking-widest opacity-60">Hrs</span>
+                    </div>
+                    <div>
+                        <span id="minutes" class="text-2xl md:text-3xl font-light block">0</span>
+                        <span class="text-[10px] uppercase tracking-widest opacity-60">Mins</span>
+                    </div>
+                    <div>
+                        <span id="seconds" class="text-2xl md:text-3xl font-light block">0</span>
+                        <span class="text-[10px] uppercase tracking-widest opacity-60">Secs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w-full md:w-[55%] h-1/2 md:h-full relative">
+            <img src="https://drive.google.com/thumbnail?id=1BHGQjL4BlWjcKhQ5cK0fg7X4OnLkeSrz&sz=w2000" alt="Lourens and Ané" class="absolute inset-0 w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-black/10"></div>
+        </div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
+            <button id="openRsvp" class="group relative w-32 h-32 md:w-40 md:h-40 rounded-full border border-white/40 bg-white/10 backdrop-blur-sm flex items-center justify-center transition-all duration-500 hover:scale-105 hover:bg-wedding-olive hover:border-wedding-olive">
+                <span class="text-white font-serif text-lg md:text-xl tracking-widest group-hover:tracking-[0.2em] transition-all duration-300">RSVP</span>
+                <div class="absolute inset-0 rounded-full border border-white/20 animate-ping opacity-20 duration-[3s]"></div>
+            </button>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 px-8 bg-wedding-cream">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <p class="text-wedding-olive text-xs uppercase tracking-[0.2em] mb-4">Our Moments</p>
+                <h2 class="font-serif text-4xl md:text-5xl text-wedding-oliveDark">Gallery</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="relative overflow-hidden group md:mt-8">
+                    <div class="aspect-[3/4] overflow-hidden">
+                        <img src="https://drive.google.com/thumbnail?id=1lAaXPIuubHzn2qGRX4MP8QYZqNa6ws7A&sz=w1000" alt="Gallery 0" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0" />
+                    </div>
+                </div>
+                <div class="relative overflow-hidden group">
+                    <div class="aspect-[3/4] overflow-hidden">
+                        <img src="https://drive.google.com/thumbnail?id=1ak-NjDMcuz9eP4kqjRg3M7kcRi4TSZhn&sz=w1000" alt="Gallery 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0" />
+                    </div>
+                </div>
+                <div class="relative overflow-hidden group md:mt-8">
+                    <div class="aspect-[3/4] overflow-hidden">
+                        <img src="https://drive.google.com/thumbnail?id=1HApcWXxx4pKC0PD1B4mULe7YFiI5wqPe&sz=w1000" alt="Gallery 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0" />
+                    </div>
+                </div>
+                <div class="relative overflow-hidden group">
+                    <div class="aspect-[3/4] overflow-hidden">
+                        <img src="https://drive.google.com/thumbnail?id=1s-OHq7f05yDeWFcDVhoT2mNL-HNUBuAi&sz=w1000" alt="Gallery 3" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guestbook Section -->
+    <section id="guestbook" class="py-20 px-8 bg-white">
+        <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-16">
+            <div>
+                <p class="text-wedding-olive text-xs uppercase tracking-[0.2em] mb-4">Leave a Note</p>
+                <h2 class="font-serif text-4xl text-wedding-oliveDark mb-6">Digital Guestbook</h2>
+                <p class="font-sans text-gray-500 mb-8 leading-relaxed">Stuck on what to say? Let our AI assistant help you craft the perfect message for our special day.</p>
+                <div class="space-y-6 font-sans">
+                    <div>
+                        <label class="block text-xs uppercase tracking-wide text-gray-500 mb-2">I am the couple's...</label>
+                        <input id="relationship" type="text" placeholder="e.g. Best Friend, Cousin, Colleague" class="w-full border-b border-gray-300 py-2 focus:outline-none focus:border-wedding-olive transition-colors" />
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-wide text-gray-500 mb-2">Message Tone</label>
+                        <div id="toneButtons" class="flex flex-wrap gap-2">
+                            <button data-tone="Heartfelt" class="tone-btn px-4 py-2 text-xs uppercase tracking-wider rounded-full border transition-all bg-wedding-olive text-white border-wedding-olive">Heartfelt</button>
+                            <button data-tone="Funny" class="tone-btn px-4 py-2 text-xs uppercase tracking-wider rounded-full border transition-all bg-transparent text-gray-500 border-gray-200 hover:border-wedding-olive">Funny</button>
+                            <button data-tone="Poetic" class="tone-btn px-4 py-2 text-xs uppercase tracking-wider rounded-full border transition-all bg-transparent text-gray-500 border-gray-200 hover:border-wedding-olive">Poetic</button>
+                            <button data-tone="Formal" class="tone-btn px-4 py-2 text-xs uppercase tracking-wider rounded-full border transition-all bg-transparent text-gray-500 border-gray-200 hover:border-wedding-olive">Formal</button>
+                        </div>
+                    </div>
+                    <button id="generateAi" class="w-full py-3 border border-wedding-olive text-wedding-olive uppercase tracking-[0.2em] text-xs hover:bg-wedding-olive hover:text-white transition-all disabled:opacity-50">Generate Message with AI</button>
+                </div>
+                <div id="aiResult" class="mt-8 p-6 bg-wedding-cream/30 rounded-lg hidden animate-fade-in">
+                    <label class="block text-xs uppercase tracking-wide text-gray-500 mb-2">Your Message</label>
+                    <textarea id="generatedMessage" class="w-full bg-transparent border-none p-0 text-wedding-oliveDark font-serif italic text-lg focus:ring-0 resize-none mb-4" rows="3"></textarea>
+                    <input id="guestName" type="text" placeholder="Sign your name" class="w-full bg-transparent border-b border-wedding-olive/30 py-1 mb-4 text-sm focus:outline-none focus:border-wedding-olive" />
+                    <button id="signGuestbook" class="text-xs uppercase font-bold text-wedding-olive hover:text-wedding-oliveDark">Sign Guestbook →</button>
+                </div>
+            </div>
+            <div class="bg-wedding-cream p-8 md:p-12 h-fit max-h-[600px] overflow-y-auto">
+                <h3 class="font-serif text-2xl text-wedding-oliveDark mb-8 text-center">Recent Wishes</h3>
+                <div id="guestbookEntries" class="space-y-8">
+                    <div class="text-center border-b border-wedding-olive/10 pb-6 last:border-0">
+                        <p class="font-serif text-lg text-wedding-oliveDark italic mb-2">"Wishing you both a lifetime of love and joy. So happy for you!"</p>
+                        <p class="font-sans text-xs uppercase tracking-widest text-gray-500">— Aunt Sarah</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registry Section -->
+    <section id="registry" class="py-24 bg-wedding-oliveDark text-wedding-cream text-center">
+        <div class="max-w-2xl mx-auto px-6">
+            <p class="text-xs uppercase tracking-[0.2em] mb-6 opacity-70">Gifts</p>
+            <h2 class="font-serif text-4xl mb-8">Registry</h2>
+            <p class="font-sans mb-12 opacity-80 leading-relaxed">Your presence is enough of a present to us! But for those of you who are stubborn, we've put together a wish-list to help you out.</p>
+            <div class="flex flex-col md:flex-row justify-center gap-6">
+                <a href="#" class="px-8 py-4 bg-transparent border border-wedding-cream/30 text-wedding-cream uppercase tracking-[0.2em] text-xs hover:bg-wedding-cream hover:text-wedding-oliveDark transition-all">Amazon</a>
+                <a href="#" class="px-8 py-4 bg-transparent border border-wedding-cream/30 text-wedding-cream uppercase tracking-[0.2em] text-xs hover:bg-wedding-cream hover:text-wedding-oliveDark transition-all">Crate & Barrel</a>
+                <a href="#" class="px-8 py-4 bg-transparent border border-wedding-cream/30 text-wedding-cream uppercase tracking-[0.2em] text-xs hover:bg-wedding-cream hover:text-wedding-oliveDark transition-all">Honeymoon Fund</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-wedding-cream py-12 text-center">
+        <h2 class="font-serif text-2xl text-wedding-oliveDark mb-2">Lourens & Ané</h2>
+        <p class="font-sans text-xs uppercase tracking-widest text-gray-500">November 21, 2026 • Cape Town</p>
+    </footer>
+
+    <!-- RSVP Modal -->
+    <div id="rsvpModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md transition-all hidden">
+        <div class="bg-wedding-cream w-full max-w-lg p-8 rounded-sm shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button id="closeRsvp" class="absolute top-4 right-4 text-wedding-oliveDark hover:text-black font-sans text-xl">✕</button>
+            <div id="rsvpFormContainer">
+                <h2 class="text-3xl font-serif text-wedding-oliveDark mb-2">Join Us</h2>
+                <p class="text-sm font-sans text-gray-600 mb-6 uppercase tracking-wider">Please respond by September 1st</p>
+                <form id="rsvpForm" class="space-y-4 font-sans">
+                    <div>
+                        <label class="block text-xs uppercase tracking-wide text-gray-500 mb-1">Full Name</label>
+                        <input type="text" name="name" required class="w-full bg-white border border-gray-300 p-3 text-wedding-oliveDark focus:outline-none focus:border-wedding-olive" />
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-wide text-gray-500 mb-1">Email</label>
+                        <input type="email" name="email" required class="w-full bg-white border border-gray-300 p-3 text-wedding-oliveDark focus:outline-none focus:border-wedding-olive" />
+                    </div>
+                    <div class="flex gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="attending" value="yes" checked class="accent-wedding-olive" />
+                            <span class="text-wedding-oliveDark">Joyfully Accepts</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="attending" value="no" class="accent-wedding-olive" />
+                            <span class="text-wedding-oliveDark">Regretfully Declines</span>
+                        </label>
+                    </div>
+                    <div id="attendingDetails">
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-xs uppercase tracking-wide text-gray-500 mb-1">Total Guests</label>
+                                <select id="guestCount" name="guests" class="w-full bg-white border border-gray-300 p-3 text-wedding-oliveDark focus:outline-none focus:border-wedding-olive">
+                                    <option value="1">1 (Just Me)</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="plusOneSection" class="bg-white/50 p-4 border border-wedding-olive/20 mt-2 hidden">
+                            <h4 class="font-serif text-lg text-wedding-oliveDark mb-3">Plus One Details</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block text-xs uppercase tracking-wide text-gray-500 mb-1">Guest Name(s)</label>
+                                    <input type="text" name="plusOneName" placeholder="Full name of your plus one" class="w-full bg-white border border-gray-300 p-3 text-wedding-oliveDark focus:outline-none focus:border-wedding-olive" />
+                                </div>
+                                <div>
+                                    <label class="block text-xs uppercase tracking-wide text-gray-500 mb-1">Guest Dietary Restrictions</label>
+                                    <input type="text" name="plusOneDietary" placeholder="Any allergies or preferences?" class="w-full bg-white border border-gray-300 p-3 text-wedding-oliveDark focus:outline-none focus:border-wedding-olive" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <label class="block text-xs uppercase tracking-wide text-gray-500 mb-1">I promise to dance if you play...</label>
+                            <input type="text" name="songRequest" placeholder="Song Title - Artist" class="w-full bg-white border border-gray-300 p-3 text-wedding-oliveDark focus:outline-none focus:border-wedding-olive" />
+                        </div>
+                        <div class="mt-4">
+                            <label class="block text-xs uppercase tracking-wide text-gray-500 mb-1">Your Dietary Restrictions</label>
+                            <textarea name="dietaryRestrictions" class="w-full bg-white border border-gray-300 p-3 text-wedding-oliveDark focus:outline-none focus:border-wedding-olive h-20"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-wedding-olive text-white py-4 mt-4 uppercase tracking-[0.2em] text-sm hover:bg-wedding-oliveDark transition-colors">Send RSVP</button>
+                </form>
+            </div>
+            <div id="rsvpSuccess" class="text-center py-12 hidden">
+                <h3 class="text-3xl font-serif text-wedding-olive mb-4">Thank You!</h3>
+                <p class="font-sans text-gray-600 mb-8">We have received your response.</p>
+                <button id="closeSuccess" class="text-xs uppercase tracking-[0.2em] border-b border-black pb-1 hover:text-wedding-olive hover:border-wedding-olive transition-colors">Close Window</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { GoogleGenAI } from "@google/genai";
+
+        // --- Configuration ---
+        const TARGET_DATE = new Date('2026-11-21T00:00:00').getTime();
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUpd7-ku4gQwdKcj8c6kSE9zX88GboD6Fk5dYR_ZcFq_cDmANsWI3pTKdYtqHqY9HH0g/exec';
+        
+        // IMPORTANT: Replace with your actual Gemini API Key
+        const API_KEY = ""; 
+
+        // --- State ---
+        let currentTone = "Heartfelt";
+        const entries = [
+            { name: "Aunt Sarah", message: "Wishing you both a lifetime of love and joy. So happy for you!" }
+        ];
+
+        // --- DOM Elements ---
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        
+        const rsvpModal = document.getElementById('rsvpModal');
+        const openRsvpBtn = document.getElementById('openRsvp');
+        const closeRsvpBtn = document.getElementById('closeRsvp');
+        const rsvpForm = document.getElementById('rsvpForm');
+        const rsvpFormContainer = document.getElementById('rsvpFormContainer');
+        const rsvpSuccess = document.getElementById('rsvpSuccess');
+        const closeSuccessBtn = document.getElementById('closeSuccess');
+        
+        const attendingRadios = document.getElementsByName('attending');
+        const attendingDetails = document.getElementById('attendingDetails');
+        const guestCountSelect = document.getElementById('guestCount');
+        const plusOneSection = document.getElementById('plusOneSection');
+
+        const relationshipInput = document.getElementById('relationship');
+        const toneButtons = document.querySelectorAll('.tone-btn');
+        const generateAiBtn = document.getElementById('generateAi');
+        const aiResult = document.getElementById('aiResult');
+        const generatedMessageTextarea = document.getElementById('generatedMessage');
+        const guestNameInput = document.getElementById('guestName');
+        const signGuestbookBtn = document.getElementById('signGuestbook');
+        const guestbookEntriesContainer = document.getElementById('guestbookEntries');
+
+        // --- Countdown Logic ---
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = TARGET_DATE - now;
+
+            if (distance < 0) {
+                return;
+            }
+
+            daysEl.innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+            hoursEl.innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            minutesEl.innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            secondsEl.innerText = Math.floor((distance % (1000 * 60)) / 1000);
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // --- RSVP Modal Logic ---
+        function openModal() {
+            rsvpModal.classList.remove('hidden');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeModal() {
+            rsvpModal.classList.add('hidden');
+            document.body.classList.remove('modal-open');
+            // Reset form if success was shown
+            setTimeout(() => {
+                rsvpFormContainer.classList.remove('hidden');
+                rsvpSuccess.classList.add('hidden');
+                rsvpForm.reset();
+                plusOneSection.classList.add('hidden');
+                attendingDetails.classList.remove('hidden');
+            }, 300);
+        }
+
+        openRsvpBtn.addEventListener('click', openModal);
+        closeRsvpBtn.addEventListener('click', closeModal);
+        closeSuccessBtn.addEventListener('click', closeModal);
+
+        attendingRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.value === 'no') {
+                    attendingDetails.classList.add('hidden');
+                } else {
+                    attendingDetails.classList.remove('hidden');
+                }
+            });
+        });
+
+        guestCountSelect.addEventListener('change', (e) => {
+            if (parseInt(e.target.value) > 1) {
+                plusOneSection.classList.remove('hidden');
+            } else {
+                plusOneSection.classList.add('hidden');
+            }
+        });
+
+        rsvpForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(rsvpForm);
+            
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const attending = formData.get('attending') === 'yes';
+            const guests = parseInt(formData.get('guests') || '1');
+            const plusOneName = formData.get('plusOneName');
+            const plusOneDietary = formData.get('plusOneDietary');
+            const songRequest = formData.get('songRequest');
+            const dietaryRestrictions = formData.get('dietaryRestrictions');
+
+            const submissionName = guests > 1 && plusOneName ? `${name} & ${plusOneName}` : name;
+            const submissionDietary = guests > 1 && plusOneDietary 
+                ? `${dietaryRestrictions ? dietaryRestrictions + '. ' : ''}Plus One: ${plusOneDietary}`
+                : dietaryRestrictions;
+
+            const payload = {
+                fullName: submissionName,
+                email: email,
+                status: attending ? 'Joyfully Accepts' : 'Regretfully Declines',
+                guests: guests,
+                songRequest: songRequest,
+                dietaryRestrictions: submissionDietary
+            };
+
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                rsvpFormContainer.classList.add('hidden');
+                rsvpSuccess.classList.remove('hidden');
+            } catch (error) {
+                console.error('Error submitting RSVP:', error);
+                alert('There was an error sending your RSVP. Please try again.');
+            }
+        });
+
+        // --- Guestbook AI Logic ---
+        toneButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                toneButtons.forEach(b => {
+                    b.classList.remove('bg-wedding-olive', 'text-white', 'border-wedding-olive');
+                    b.classList.add('bg-transparent', 'text-gray-500', 'border-gray-200');
+                });
+                btn.classList.add('bg-wedding-olive', 'text-white', 'border-wedding-olive');
+                btn.classList.remove('bg-transparent', 'text-gray-500', 'border-gray-200');
+                currentTone = btn.dataset.tone;
+            });
+        });
+
+        generateAiBtn.addEventListener('click', async () => {
+            const rel = relationshipInput.value;
+            if (!rel) return;
+
+            generateAiBtn.disabled = true;
+            generateAiBtn.innerText = 'Crafting Message...';
+
+            try {
+                if (!API_KEY) {
+                    generatedMessageTextarea.value = `Wishing you a lifetime of happiness, Lourens and Ané! (AI Key missing)`;
+                } else {
+                    const ai = new GoogleGenAI({ apiKey: API_KEY });
+                    const prompt = `
+                        Write a wedding guestbook message for a couple named Lourens and Ané.
+                        The message is from a person who is the "${rel}" of the couple.
+                        The tone should be "${currentTone}".
+                        Keep it under 50 words.
+                        Do not include "Dear..." or "Sincerely...", just the body of the message.
+                    `;
+                    const response = await ai.models.generateContent({
+                        model: 'gemini-3-flash-preview',
+                        contents: prompt
+                    });
+                    generatedMessageTextarea.value = response.text.trim();
+                }
+                aiResult.classList.remove('hidden');
+            } catch (error) {
+                console.error('AI Error:', error);
+                generatedMessageTextarea.value = "Wishing you both a lifetime of love and happiness!";
+                aiResult.classList.remove('hidden');
+            } finally {
+                generateAiBtn.disabled = false;
+                generateAiBtn.innerText = 'Generate Message with AI';
+            }
+        });
+
+        function renderEntries() {
+            guestbookEntriesContainer.innerHTML = entries.map(entry => `
+                <div class="text-center border-b border-wedding-olive/10 pb-6 last:border-0">
+                    <p class="font-serif text-lg text-wedding-oliveDark italic mb-2">"${entry.message}"</p>
+                    <p class="font-sans text-xs uppercase tracking-widest text-gray-500">— ${entry.name}</p>
+                </div>
+            `).join('');
+        }
+
+        signGuestbookBtn.addEventListener('click', () => {
+            const name = guestNameInput.value;
+            const msg = generatedMessageTextarea.value;
+            if (name && msg) {
+                entries.unshift({ name, message: msg });
+                renderEntries();
+                // Reset
+                aiResult.classList.add('hidden');
+                guestNameInput.value = '';
+                generatedMessageTextarea.value = '';
+                relationshipInput.value = '';
+            }
+        });
+
+        // --- Navigation Active State ---
+        window.addEventListener('scroll', () => {
+            const sections = ['home', 'gallery', 'registry', 'guestbook'];
+            let current = 'home';
+            
+            sections.forEach(id => {
+                const section = document.getElementById(id);
+                const sectionTop = section.offsetTop;
+                if (window.pageYOffset >= sectionTop - 100) {
+                    current = id;
+                }
+            });
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('text-white', 'opacity-100');
+                link.classList.add('text-white/70');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('text-white', 'opacity-100');
+                    link.classList.remove('text-white/70');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
