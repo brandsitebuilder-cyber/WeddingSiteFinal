@@ -305,8 +305,19 @@
         const TARGET_DATE = new Date('2026-11-21T00:00:00').getTime();
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUpd7-ku4gQwdKcj8c6kSE9zX88GboD6Fk5dYR_ZcFq_cDmANsWI3pTKdYtqHqY9HH0g/exec';
         
-        // IMPORTANT: Replace with your actual Gemini API Key
-        const API_KEY = "AIzaSyDHazLq8RXUy1TeQEpnHYVcZQ76DC4Svvo"; 
+        async function getApiKey() {
+            try {
+                const response = await fetch('./config.php');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                return data.apiKey;
+            } catch (error) {
+                console.error('Failed to fetch API key:', error);
+                return null;
+            }
+        }
 
         // --- State ---
         let currentTone = "Heartfelt";
@@ -463,10 +474,11 @@
             generateAiBtn.innerText = 'Crafting Message...';
 
             try {
-                if (!API_KEY) {
-                    generatedMessageTextarea.value = `Wishing you a lifetime of happiness, Lourens and Ané! (AI Key missing)`;
+                const apiKey = await getApiKey();
+                if (!apiKey) {
+                    generatedMessageTextarea.value = `Wishing you a lifetime of happiness, Lourens and Ané! (AI Key missing or failed to load)`;
                 } else {
-                    const ai = new GoogleGenAI({ apiKey: API_KEY });
+                    const ai = new GoogleGenAI({ apiKey: apiKey });
                     const prompt = `
                         Write a wedding guestbook message for a couple named Lourens and Ané.
                         The message is from a person who is the "${rel}" of the couple.
