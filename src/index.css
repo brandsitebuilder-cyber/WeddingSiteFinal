@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --color-wedding-olive: #6b705c;
+  --color-wedding-olive-dark: #4a4e40;
+  --color-wedding-cream: #f0ebd8;
+  --color-wedding-sand: #ddb892;
+  --color-wedding-charcoal: #333333;
+
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Lato", sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-wedding-cream text-wedding-charcoal antialiased;
+  }
+}
+
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f0ebd8;
+}
+::-webkit-scrollbar-thumb {
+  background: #6b705c;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4a4e40;
+}
